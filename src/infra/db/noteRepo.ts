@@ -1,10 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import type { CreateNotes, INote, UpdateNotes } from "../entity/interface";
-
+import "reflect-metadata";
+import { injectable, inject } from 'inversify';
+import { TYPES } from '../entity/types';
+@injectable()
 export class NoteRepository implements INote {
     private prisma: PrismaClient;
 
-    constructor(prisma: PrismaClient) {
+    constructor(@inject(TYPES.prisma) prisma: PrismaClient) {
         this.prisma = prisma
     }
 

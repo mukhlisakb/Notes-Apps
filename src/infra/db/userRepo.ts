@@ -1,10 +1,14 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import type { CreateUser, IUser, UpdateUser } from "../entity/interface";
+import "reflect-metadata";
+import { injectable, inject } from "inversify";
+import { TYPES } from "../entity/types";
 
+@injectable()
 export class UserRepository implements IUser {
     private prisma: PrismaClient
 
-    constructor(prisma: PrismaClient) {
+    constructor(@inject(TYPES.prisma) prisma: PrismaClient) {
         this.prisma = prisma;
     }
 
@@ -13,10 +17,13 @@ export class UserRepository implements IUser {
         return users;
     }
 
-    async getOne(userId: string) {
-        const user = await this.prisma.user.findUnique({
+    async getOne(userIdOrEmail: string) {
+        const user = await this.prisma.user.findFirst({
             where: {
-                id: userId,
+                OR: [
+                    { id: userIdOrEmail },
+                    { email: userIdOrEmail }
+                ]
             },
         });
         return user;
