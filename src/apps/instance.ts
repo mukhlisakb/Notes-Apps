@@ -20,5 +20,5 @@ container.bind(NoteServices).toSelf();
 
 // instance
 
-export const authServices = container.get<AuthServices>(NoteServices);
-export const noteSercives = container.get<AuthServices>(NoteServices);
+export const authServices = container.get<AuthServices>(AuthServices);
+export const noteSercives = container.get<NoteRepository>(NoteServices);
